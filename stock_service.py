@@ -3,7 +3,7 @@ import os
 import finnhub
 
 load_dotenv()
-APIKEY = os.getenv('STOCK_DASHBOARD_APIKEY')
+APIKEY = os.getenv("STOCK_DASHBOARD_APIKEY")
 
 finnhub_client = finnhub.Client(api_key=APIKEY)
 
