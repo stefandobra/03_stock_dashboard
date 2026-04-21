@@ -7,7 +7,7 @@ app = Flask(__name__)
 def index():
     quote = None
     if request.method == 'GET':
-        return render_template('index.html', quote=quote)
+        return render_template('index.html', quote=quote, symbol=None)
     else:
         symbol = request.form.get('symbol')
         if symbol:

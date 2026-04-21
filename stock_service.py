@@ -8,4 +8,8 @@ APIKEY = os.getenv("STOCK_DASHBOARD_APIKEY")
 finnhub_client = finnhub.Client(api_key=APIKEY)
 
 def get_quote(symbol: str):
-    return(finnhub_client.quote(symbol))
+    quote = finnhub_client.quote(symbol)
+    if quote['c'] == 0:
+        return None
+    else:
+        return quote
