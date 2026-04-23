@@ -1,12 +1,38 @@
 <html>
+
 <h1>Stock Dashboard</h1>
     
 <form action="/" method="post">
   <label for="symbol">Symbol:</label>
   <input type="text" id="symbol" name="symbol"><br><br>
-  <input type="submit" value="Submit">
+
+  <label for="timeframe">Choose an timeframe:</label>
+    <select name="timeframe" id="timeframe">
+        <optgroup label="1 Day">
+            <option value="1D">1 minute</option>
+        </optgroup>
+        <optgroup label="5 Days">
+            <option value="5D">15 minutes</option>
+        </optgroup>
+        <optgroup label="1 Month">
+            <option value="1M">1 hour</option>
+        </optgroup>
+        <optgroup label="6 Months">
+            <option value="6M">1 day</option>
+        </optgroup>
+        <optgroup label="1 Year">
+            <option value="1Y">1 week</option>
+        </optgroup>
+        <optgroup label="All">
+            <option value="ALL">1 month</option>
+        </optgroup>
+    </select>
+    <br><br>
+    <input type="submit" value="Submit">
 </form>
+
 {% if quote %}
+
 <h2>Stock: {{ symbol.upper() }}</h2>
 <p>Current price:      {{ quote.c }}</p>
 <p>Daily change:       {{ quote.d }}</p>
@@ -15,7 +41,11 @@
 <p>Daily low:          {{ quote.l }}</p>
 <p>Open price:         {{ quote.o }}</p>
 <p>Previous close:     {{ quote.pc }}</p>
+
 {% elif symbol %}
+
 <h2>Stock: {{ symbol.upper() }} doesn't exist</h2>
+
 {%endif%}
+
 </html>
