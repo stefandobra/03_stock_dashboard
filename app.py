@@ -15,7 +15,14 @@ def index():
         if symbol:
             quote = get_quote(symbol.upper())
             price_history = get_price_history(symbol.upper(), timeframe)
-            return render_template('index.html', quote=quote, symbol=symbol, price_history=price_history)
+            date_time = []
+            close_price = []
+            for price in price_history:
+                date_time.append(price['datetime'])
+                close_price.append(price['close'])
+            date_time.reverse()
+            close_price.reverse()
+            return render_template('index.html', quote=quote, symbol=symbol, date_time=date_time, close_price=close_price)
         return render_template('index.html', quote=quote)
 
 if __name__ == '__main__':

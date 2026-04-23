@@ -42,10 +42,32 @@
 <p>Open price:         {{ quote.o }}</p>
 <p>Previous close:     {{ quote.pc }}</p>
 
+<h2>Price History</h2>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<canvas id="priceHistoryChart" style="width:100%;max-width:700px"></canvas>
+<script type="text/javascript">
+    date_time = {{ date_time|tojson }}
+    close_price = {{ close_price|tojson }}
+    new Chart("priceHistoryChart", {
+  type: "line",
+  data: {
+    labels: date_time,
+    datasets: [{
+        label: 'Price History for {{ symbol.upper() }}',
+        backgroundColor:"rgba(0,0,255,1.0)",
+        borderColor: "rgba(0,0,255,0.1)",
+        data: close_price
+    }]
+  }
+
+});
+</script>
+
 {% elif symbol %}
 
 <h2>Stock: {{ symbol.upper() }} doesn't exist</h2>
 
 {%endif%}
+
 
 </html>
