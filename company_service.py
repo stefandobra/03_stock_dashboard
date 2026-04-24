@@ -12,3 +12,11 @@ def get_profile(symbol):
         return company_profile
     else:
         return None
+    
+def format_market_cap(market_cap):
+    if market_cap >= 1_000_000:
+        return f'${market_cap/1_000_000:,.2f}T'
+    elif market_cap >= 1_000:
+        return f'${market_cap/1_000:,.2f}B'
+    else:
+        return f'${market_cap:,.2f}M'
