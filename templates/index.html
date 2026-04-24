@@ -33,50 +33,59 @@
 
 {% if quote %}
 
-<h2>Stock: {{ symbol.upper() }}</h2>
-<br>
-<h2>Company Profile</h2>
-<p>
-    Name: {{ company_profile.name }} 
-    <img src={{ company_profile.logo }} alt="Company Logo" width="50" height="50"><br>
-<br>
-    Country: {{ company_profile.country }}<br>
-    Exchange: {{ company_profile.exchange }}<br>
-    Market capitalisation: {{ market_cap }}<br>
-    Outstanding shares: {{ company_profile.shareOutstanding }}
-</p>
+    <h2>Stock: {{ symbol.upper() }}</h2>
+    <br>
+    <h2>Company Profile</h2>
+    <p>
+        Name: {{ company_profile.name }} 
+        <img src={{ company_profile.logo }} alt="Company Logo" width="50" height="50"><br>
+    <br>
+        Country: {{ company_profile.country }}<br>
+        Exchange: {{ company_profile.exchange }}<br>
+        Market capitalisation: {{ market_cap }}<br>
+        Outstanding shares: {{ company_profile.shareOutstanding }}
+    </p>
 
-<br>
-<p>
-    Current price: {{ quote.c }}<br>
-    Daily change: {{ quote.d }}<br>
-    Percentage change: {{ quote.dp }}<br>
-    Daily high: {{ quote.h }}<br>
-    Daily low: {{ quote.l }}<br>
-    Open price: {{ quote.o }}<br>
-    Previous close: {{ quote.pc }}<br>
-</p>
+    <p>
+        Current price: {{ quote.c }}<br>
+        Daily change: {{ quote.d }}<br>
+        Percentage change: {{ quote.dp }}<br>
+        Daily high: {{ quote.h }}<br>
+        Daily low: {{ quote.l }}<br>
+        Open price: {{ quote.o }}<br>
+        Previous close: {{ quote.pc }}<br>
+    </p>
 
-<h2>Price History</h2>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<canvas id="priceHistoryChart" style="width:100%"></canvas>
-<script type="text/javascript">
-    date_time = {{ date_time|tojson }}
-    close_price = {{ close_price|tojson }}
-    new Chart("priceHistoryChart", {
-  type: "line",
-  data: {
-    labels: date_time,
-    datasets: [{
-        label: 'Price History for {{ symbol.upper() }}',
-        backgroundColor:"rgba(0,0,255,1.0)",
-        borderColor: "rgba(0,0,255,0.1)",
-        data: close_price
-    }]
-  }
+    <h2>Price History</h2>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <canvas id="priceHistoryChart" style="width:100%"></canvas>
+    <script type="text/javascript">
+        date_time = {{ date_time|tojson }}
+        close_price = {{ close_price|tojson }}
+        new Chart("priceHistoryChart", {
+    type: "line",
+    data: {
+        labels: date_time,
+        datasets: [{
+            label: 'Price History for {{ symbol.upper() }}',
+            backgroundColor:"rgba(0,0,255,1.0)",
+            borderColor: "rgba(0,0,255,0.1)",
+            data: close_price
+        }]
+    }
 
-});
-</script>
+    });
+    </script>
+
+    <h2>Company news</h2>
+    {% for news in company_news %}
+        <article>
+        <h3>{{ news.headline }}</h3>
+        <i>Source: {{ news.source }}</i>
+        <p>Summary: {{ news.summary }}</p>
+        <p><b>URL: </b>{{ news.url }}</p>
+        </article>
+    {% endfor %}
 
 {% elif symbol %}
 
