@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from stock_service import get_quote
 from history_service import get_price_history
 from news_service import get_news
-from company_service import get_profile, format_market_cap
+from company_service import get_profile, format_market_cap, format_shares
 
 app = Flask(__name__)
 
@@ -30,10 +30,10 @@ def index():
             company_news = get_news(symbol)
             
             market_cap = format_market_cap(company_profile['marketCapitalization']) if company_profile else None
-
+            shares = format_shares(company_profile['shareOutstanding']) if company_profile else None
             return render_template('index.html', quote=quote, symbol=symbol, date_time=date_time, 
                     close_price=close_price, company_profile=company_profile, company_news=company_news,
-                    market_cap=market_cap)
+                    market_cap=market_cap, shares=shares)
         return render_template('index.html', quote=quote)
 
 if __name__ == '__main__':
