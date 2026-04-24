@@ -35,7 +35,3 @@ def get_price_history(symbol, timeframe):
     )
 
     return ts.as_json()
-
-
-if __name__ == '__main__':
-    print(get_price_history('AAPL', '5D'))

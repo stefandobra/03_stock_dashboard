@@ -17,11 +17,3 @@ def get_news(symbol, from_date=None, to_date=None):
         return company_news
     else:
         return None
-    
-
-if __name__ == '__main__':
-    #print(get_news('AAPL'))
-    news = get_news('CROX')
-    if news:
-        timestamp = datetime.datetime.fromtimestamp(news[0]['datetime'])
-        print(timestamp.strftime('%Y-%m-%d %H:%M:%S'))
