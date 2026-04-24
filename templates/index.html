@@ -34,7 +34,6 @@
 {% if quote %}
 
     <h2>Stock: {{ symbol.upper() }}</h2>
-    <br>
     <h2>Company Profile</h2>
     <p>
         Name: {{ company_profile.name }} 
@@ -43,7 +42,7 @@
         Country: {{ company_profile.country }}<br>
         Exchange: {{ company_profile.exchange }}<br>
         Market capitalisation: {{ market_cap }}<br>
-        Outstanding shares: {{ company_profile.shareOutstanding }}
+        Outstanding shares: {{ shares }}
     </p>
 
     <p>
@@ -78,14 +77,18 @@
     </script>
 
     <h2>Company news</h2>
-    {% for news in company_news %}
-        <article>
-        <h3>{{ news.headline }}</h3>
-        <i>Source: {{ news.source }}</i>
-        <p>Summary: {{ news.summary }}</p>
-        <p><b>URL: </b>{{ news.url }}</p>
-        </article>
-    {% endfor %}
+    {% if company_news %}
+        {% for news in company_news %}
+            <article>
+            <h3>{{ news.headline }}</h3>
+            <i>Source: {{ news.source }}</i>
+            <p>Summary: {{ news.summary }}</p>
+            <p><b>URL: </b>{{ news.url }}</p>
+            </article>
+        {% endfor %}
+    {% else%}
+        <h2>No News in the past week</h2>
+    {% endif %}
 
 {% elif symbol %}
 
