@@ -20,3 +20,11 @@ def format_market_cap(market_cap):
         return f'${market_cap/1_000:,.2f}B'
     else:
         return f'${market_cap:,.2f}M'
+
+def format_shares(shares):
+    if shares >= 1_000:
+        return f'{shares/1_000:,.2f}B shares'
+    elif shares >= 1 :
+        return f'{shares:,.2f}M shares'
+    else:
+        return f'{shares*1_000_000:,.2f} shares'
