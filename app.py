@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from stock_service import get_quote
 from history_service import get_price_history
+from news_service import get_news
+from company_service import get_profile
 
 app = Flask(__name__)
 
@@ -14,6 +16,7 @@ def index():
         timeframe = request.form.get('timeframe')
         if symbol:
             quote = get_quote(symbol.upper())
+
             price_history = get_price_history(symbol.upper(), timeframe)
             date_time = []
             close_price = []
@@ -22,7 +25,12 @@ def index():
                 close_price.append(price['close'])
             date_time.reverse()
             close_price.reverse()
-            return render_template('index.html', quote=quote, symbol=symbol, date_time=date_time, close_price=close_price)
+
+            company_profile = get_profile(symbol)
+            company_news = get_news(symbol)
+
+            return render_template('index.html', quote=quote, symbol=symbol, date_time=date_time, 
+                    close_price=close_price, company_profile=company_profile, company_news=company_news)
         return render_template('index.html', quote=quote)
 
 if __name__ == '__main__':
