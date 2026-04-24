@@ -34,13 +34,28 @@
 {% if quote %}
 
 <h2>Stock: {{ symbol.upper() }}</h2>
-<p>Current price:      {{ quote.c }}</p>
-<p>Daily change:       {{ quote.d }}</p>
-<p>Percentage change:  {{ quote.dp }}</p>
-<p>Daily high:         {{ quote.h }}</p>
-<p>Daily low:          {{ quote.l }}</p>
-<p>Open price:         {{ quote.o }}</p>
-<p>Previous close:     {{ quote.pc }}</p>
+<br>
+<h2>Company Profie</h2>
+<p>
+    Name: {{ company_profile.name }} 
+    <img src={{ company_profile.logo }} alt="Company Logo" width="50" height="50"><br>
+<br>
+    Country: {{ company_profile.country }}<br>
+    Exchange: {{ company_profile.exchange }}<br>
+    Market capitalisation: {{ market_cap }}<br>
+    Outstanding shares: {{ company_profile.shareOutstanding }}
+</p>
+
+<br>
+<p>
+    Current price: {{ quote.c }}<br>
+    Daily change: {{ quote.d }}<br>
+    Percentage change: {{ quote.dp }}<br>
+    Daily high: {{ quote.h }}<br>
+    Daily low: {{ quote.l }}<br>
+    Open price: {{ quote.o }}<br>
+    Previous close: {{ quote.pc }}<br>
+</p>
 
 <h2>Price History</h2>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
