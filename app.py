@@ -3,8 +3,10 @@ from stock_service import get_quote
 from history_service import get_price_history
 from news_service import get_news
 from company_service import get_profile, format_market_cap, format_shares
+from db import create_tables
 
 app = Flask(__name__)
+create_tables()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
