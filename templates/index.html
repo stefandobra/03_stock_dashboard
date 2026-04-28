@@ -34,6 +34,26 @@
 {% if quote %}
 
     <h2>Stock: {{ symbol.upper() }}</h2>
+
+    <button onclick="addToWatchlist()">Add to Watchlist</button>
+
+    <script>
+    function addToWatchlist() {
+        fetch('/add_to_watchlist', {
+            method: 'POST',
+            body: "symbol={{ symbol }}",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('watchlist-message').innerText = 'Added to watchlist'
+        });
+    }
+    </script>
+
+    <i id="watchlist-message"></i>
+
+
     <h2>Company Profile</h2>
     <p>
         Name: {{ company_profile.name }} 

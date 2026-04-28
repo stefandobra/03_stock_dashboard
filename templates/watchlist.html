@@ -1,0 +1,37 @@
+<html>
+    <style>
+    table, th, td {
+    border:1px solid black;
+    }
+    </style>
+    <h1>Watchlist</h1>
+
+    {% if watchlist_data %}
+        <table style="width: 100%;">
+            <tr>
+                <th>Symbol</th>
+                <th>Current price</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Change</th>
+                <th>Percentage change</th>
+                <th>Open price</th>
+                <th>Close price</th>
+            </tr>
+            {%for row in watchlist_data %}
+            <tr>
+                <td>{{ row }}</td>
+                <td>{{ watchlist_data[row].c }}</td>
+                <td>{{ watchlist_data[row].h }}</td>
+                <td>{{ watchlist_data[row].l }}</td>
+                <td>{{ watchlist_data[row].d }}</td>
+                <td>{{ watchlist_data[row].dp }}</td>
+                <td>{{ watchlist_data[row].o }}</td>
+                <td>{{ watchlist_data[row].pc }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+        
+
+</html>
