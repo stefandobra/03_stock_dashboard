@@ -2,6 +2,7 @@ from db import get_connection
 from datetime import date
 
 def add_symbol(symbol):
+    """Connects to database, parses date to ISO format and inserts symbol and date into watchlist table"""
     con, cur = get_connection()
 
     date_time = date.today().strftime("%Y-%m-%d")
@@ -11,6 +12,7 @@ def add_symbol(symbol):
     con.commit()
 
 def view_watchlist():
+    """Connects to database, fetches all data in watchlist and returns it"""
     con, cur = get_connection()
 
     cur.execute("SELECT * FROM watchlist ORDER BY dateadded")
@@ -19,6 +21,7 @@ def view_watchlist():
     return watchlist
 
 def remove_symbol(symbol):
+    """Connects to database and deletes one entry from table"""
     con, cur = get_connection()
 
     data = (symbol, )
