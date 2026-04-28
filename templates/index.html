@@ -35,18 +35,24 @@
 
     <h2>Stock: {{ symbol.upper() }}</h2>
 
+    <!--Adds button below that runs JS function-->
     <button onclick="addToWatchlist()">Add to Watchlist</button>
 
     <script>
-    function addToWatchlist() {
-        fetch('/add_to_watchlist', {
-            method: 'POST',
-            body: "symbol={{ symbol }}",
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    function addToWatchlist() { //create function
+        fetch('/add_to_watchlist', { //select which route to comunicate to
+            method: 'POST', // POST sends data, GET only requests data
+            body: "symbol={{ symbol }}", // body is what is sent and it is defined as symbol
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'} // tells Flask to expect form-encoded data, same format as HTML forms
         })
-        .then(response => response.json())
+        .then(response => response.json()) // converts response to JSON
         .then(data => {
-            document.getElementById('watchlist-message').innerText = 'Added to watchlist'
+            if (data.success) { // check if response is True
+                document.getElementById('watchlist-message').innerText = 'Added to watchlist' // if succesfull changes the <i> by marching id
+            }
+            else
+                document.getElementById('watchlist-message').innerText = 'Stock already exists in watchlist' // if not succesfull changes the <i> by marching id
+                
         });
     }
     </script>
