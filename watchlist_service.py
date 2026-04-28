@@ -17,3 +17,10 @@ def view_watchlist():
     watchlist = cur.fetchall()
     
     return watchlist
+
+def remove_symbol(symbol):
+    con, cur = get_connection()
+
+    data = (symbol, )
+    cur.execute("DELETE FROM watchlist WHERE symbol = (?)", data)
+    con.commit()
