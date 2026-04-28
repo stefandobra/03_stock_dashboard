@@ -54,6 +54,10 @@ def watchlist():
 def add_to_watchlist():
     symbol = request.form.get('symbol')
     if symbol:
+        watchlist = view_watchlist()
+        for row in watchlist:
+            if row[0] == symbol.upper():
+                return {"success": False}
         add_symbol(symbol.upper())
     return {"success": True}
 
