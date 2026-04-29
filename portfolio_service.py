@@ -6,11 +6,24 @@ def add_to_portfolio(symbol, shares, price):
     con, cur = get_connection()
 
     date_time = date.today().strftime("%Y-%m-%d")
+    
+    cur.execute("SELECT symbol, dateadded, sharesowned, avgprice FROM portfolio WHERE symbol=?", (symbol, ))
+    stock = cur.fetchone()
 
-    data = (symbol, date_time, shares, price)
+    if stock:
+        existing_shares = stock['sharesowned']
+        average_price = stock['avgprice']
 
-    cur.execute("INSERT INTO portfolio VALUES (?, ?, ?, ?)", data)
-    con.commit()
+        total_shares = existing_shares + shares
+        new_avg = (existing_shares * average_price + shares * price) / (total_shares)
+
+        data = (total_shares, new_avg, symbol)
+        cur.execute("UPDATE portfolio SET sharesowned=?, avgprice=? WHERE symbol=?", data)
+        con.commit()
+    else:
+        data = (symbol, date_time, shares, price)
+        cur.execute("INSERT INTO portfolio VALUES (?, ?, ?, ?)", data)
+        con.commit()
 
 def view_portfolio():
     """Connects to database, fetches all data in portfolio and returns it"""
