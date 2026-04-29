@@ -5,9 +5,10 @@
 <h2>Menu</h2>
 <nav>
     <a href="/watchlist">View Watchlist</a>
+    <a href="/portfolio">View Portfolio</a>
 </nav>
 
-<h2>Seach Stock</h2>
+<h2>Search Stock</h2>
 <form action="/" method="post">
   <label for="symbol">Symbol:</label>
   <input type="text" id="symbol" name="symbol"><br><br>
@@ -44,6 +45,14 @@
     <!--Adds button below that runs JS function-->
     <button onclick="addToWatchlist()">Add to Watchlist</button>
 
+    <!--Adds button to show form for adding new stock to portfolio-->
+    <button onclick="showForm()">Add to Portfolio</button>
+
+     <!--Adds hidden input fields and submit button-->
+    <input style="display: none;" type="text" id="shares" name="shares">
+    <input style="display: none;" type="text" id="price" name="price">
+    <button style="display: none;" onclick="addToPortfolio()" id="submit">Add to Portfolio</button>
+
     <script>
     function addToWatchlist() { //create function
         fetch('/add_to_watchlist', { //select which route to comunicate to
@@ -57,14 +66,38 @@
                 document.getElementById('watchlist-message').innerText = 'Added to watchlist' // if succesfull changes the <i> by marching id
             }
             else
-                document.getElementById('watchlist-message').innerText = 'Stock already exists in watchlist' // if not succesfull changes the <i> by marching id
-                
+                document.getElementById('watchlist-message').innerText = 'Stock already exists in watchlist' // if not succesfull changes the <i> by marching id       
         });
     }
+
+    function addToPortfolio() {
+        shares = document.getElementById('shares').value
+        price = document.getElementById('price').value
+        fetch('add_to_portfolio', {
+            method: 'POST',
+            body: "symbol={{ symbol }}&shares=" + shares + "&price=" + price, 
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('portfolio-message').innerText = 'Added to portfolio'
+            }
+            else
+                document.getElementById('portfolio-message').innerText = 'Stock already exists in portfolio'
+        })
+    }
+
+    function showForm() {
+        document.getElementById('shares').style.display = 'block'
+        document.getElementById('price').style.display = 'block'
+        document.getElementById('submit').style.display = 'inline'
+
+    }
     </script>
-
-    <i id="watchlist-message"></i>
-
+    <br>
+    <i id="watchlist-message"></i><br>
+    <i id="portfolio-message"></i>
 
     <h2>Company Profile</h2>
     <p>
