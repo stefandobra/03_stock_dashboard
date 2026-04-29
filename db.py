@@ -11,6 +11,7 @@ def create_tables():
 def get_connection():
     """Returns connection and cursor for the database"""
     con = sqlite3.connect("stock_dashboard.db")
+    con.row_factory = sqlite3.Row
     cur = con.cursor()
 
     return con, cur

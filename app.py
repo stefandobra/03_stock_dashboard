@@ -45,7 +45,7 @@ def watchlist():
         watchlist = view_watchlist()
         watchlist_data = {}
         for row in watchlist:
-            symbol = row[0]
+            symbol = row['symbol']
             quote = get_quote(symbol.upper())
             watchlist_data[symbol] = quote
         return render_template('watchlist.html', watchlist_data=watchlist_data)
@@ -60,7 +60,7 @@ def add_to_watchlist():
     if symbol:
         watchlist = view_watchlist()
         for row in watchlist:
-            if row[0] == symbol.upper():
+            if row['symbol'] == symbol.upper():
                 return {"success": False}
         add_symbol(symbol.upper())
     return {"success": True}
