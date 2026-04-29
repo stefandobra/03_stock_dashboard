@@ -18,7 +18,7 @@ def add_to_portfolio(symbol, shares, price):
         new_avg = (existing_shares * average_price + shares * price) / (total_shares)
 
         data = (total_shares, new_avg, symbol)
-        cur.execute("UPDATE portfolio SET sharesowned=?, avgprice=? WHERE symbol=?", data)
+        cur.execute("UPDATE portfolio SET sharesowned=?, avgprice=? WHERE symbol = ?", data)
         con.commit()
     else:
         data = (symbol, date_time, shares, price)
@@ -33,3 +33,11 @@ def view_portfolio():
     portfolio = cur.fetchall()
 
     return portfolio
+
+def remove_from_portfolio(symbol):
+    """Connects to database and deletes one entry from table"""
+    con, cur = get_connection()
+
+    data = (symbol, )
+    cur.execute("DELETE FROM portfolio WHERE symbol = (?)", data)
+    con.commit()
