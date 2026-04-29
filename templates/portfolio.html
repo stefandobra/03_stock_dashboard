@@ -29,7 +29,7 @@
                     <td>{{ data.avg_price }}</td>
                     <td>{{ data.current_price }}</td>
                     <td>{{ data.value }}</td>
-                    <td>{{ data.pl }}</td>
+                    <td>{{ data.pl | round (2) }} </td>
                     <td>
                         <form action="/portfolio" method="post">
                             <input type="hidden" name="symbol" value="{{ symbol }}">
