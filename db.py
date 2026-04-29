@@ -6,6 +6,7 @@ def create_tables():
     cur = con.cursor()
 
     cur.execute("CREATE TABLE IF NOT EXISTS watchlist(symbol TEXT, dateadded TEXT)")
+    cur.execute("CREATE TABLE IF NOT EXISTS portfolio(symbol TEXT, dateadded TEXT, sharesowned REAL, avgprice REAL)")
 
 def get_connection():
     """Returns connection and cursor for the database"""
