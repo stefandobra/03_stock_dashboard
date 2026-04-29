@@ -1,0 +1,46 @@
+<html>
+    <style>
+    table, th, td {
+    border:1px solid black;
+    }
+    </style>
+    <h1>Portfolio</h1>
+
+    <nav>
+        <a href="/">Home page</a>
+    </nav>
+    <br>
+
+    {% if portfolio_data %}
+        <table style="width: 100%;">
+            <tr>
+                <th>Symbol</th>
+                <th>Shares owned</th>
+                <th>Average price</th>
+                <th>Current price</th>
+                <th>Total Value</th>
+                <th>P/L</th>
+                <th>Remove from portfolio</th>
+            </tr>
+            {% for symbol, data in portfolio_data.items() %}
+                <tr>
+                    <td>{{ symbol }}</td>
+                    <td>{{ data.shares }}</td>
+                    <td>{{ data.avg_price }}</td>
+                    <td>{{ data.current_price }}</td>
+                    <td>{{ data.value }}</td>
+                    <td>{{ data.pl }}</td>
+                    <td>
+                        <form action="/portfolio" method="post">
+                            <input type="hidden" name="symbol" value="{{ symbol }}">
+                            <input type="submit" value="Remove from portfolio">
+                        </form>
+                        {% if message %}
+                            <i>{{ message }}</i>
+                        {% endif %}
+                    </td> 
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</html>
