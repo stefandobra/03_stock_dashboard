@@ -5,7 +5,7 @@ from news_service import get_news
 from company_service import get_profile, format_market_cap, format_shares
 from db import create_tables
 from watchlist_service import view_watchlist, add_symbol, remove_symbol
-from portfolio_service import view_portfolio
+from portfolio_service import view_portfolio, remove_from_portfolio, add_to_portfolio
 
 app = Flask(__name__)
 create_tables()
@@ -64,7 +64,8 @@ def add_to_watchlist():
             if row['symbol'] == symbol.upper():
                 return {"success": False}
         add_symbol(symbol.upper())
-    return {"success": True}
+        return {"success": True}
+    return {"success": False}
 
 @app.route('/portfolio', methods=['GET', 'POST'])
 def portfolio():
@@ -88,7 +89,26 @@ def portfolio():
                     'pl': pl
                 }
         return render_template('portfolio.html', portfolio_data=portfolio_data)
-        
+    else:
+        symbol = request.form.get('symbol')
+        remove_from_portfolio(symbol)
+        return redirect('/portfolio')
+    
+@app.route('/add_to_portfolio', methods=['POST'])
+def add_portfolio_entry():
+    symbol = request.form.get('symbol')
+    if symbol:
+        portfolio = view_portfolio()
+        for row in portfolio:
+            if row['symbol'] == symbol:
+                return {"success": False}
+        shares = request.form.get('shares')
+        price = request.form.get('price')
+        add_to_portfolio(symbol.upper(), shares, price)
+        return {"success": True}
+    return {"success": False}
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     
