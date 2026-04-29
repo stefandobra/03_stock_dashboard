@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from stock_service import get_quote
 from history_service import get_price_history
 from news_service import get_news
 from company_service import get_profile, format_market_cap, format_shares
 from db import create_tables
-from watchlist_service import view_watchlist, add_symbol
+from watchlist_service import view_watchlist, add_symbol, remove_symbol
 
 app = Flask(__name__)
 create_tables()
@@ -49,7 +49,11 @@ def watchlist():
             quote = get_quote(symbol.upper())
             watchlist_data[symbol] = quote
         return render_template('watchlist.html', watchlist_data=watchlist_data)
-
+    else:
+        symbol = request.form.get('symbol')
+        remove_symbol(symbol)
+        return redirect('/watchlist')
+    
 @app.route('/add_to_watchlist', methods=['POST'])
 def add_to_watchlist():
     symbol = request.form.get('symbol')

@@ -17,6 +17,7 @@
                 <th>Percentage change</th>
                 <th>Open price</th>
                 <th>Close price</th>
+                <th>Remove from watchlist</th>
             </tr>
             {%for row in watchlist_data %}
             <tr>
@@ -28,6 +29,15 @@
                 <td>{{ watchlist_data[row].dp }}</td>
                 <td>{{ watchlist_data[row].o }}</td>
                 <td>{{ watchlist_data[row].pc }}</td>
+                <td>
+                    <form action="/watchlist" method="post">
+                        <input type="hidden" name="symbol" value="{{ row }}">
+                        <input type="submit" value="Remove from watchlist">
+                    </form>
+                    {% if message %}
+                        <i>{{ message }}</i>
+                    {%endif%}
+                </td>
             </tr>
             {% endfor %}
         </table>
