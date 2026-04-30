@@ -114,8 +114,8 @@ def compare():
         symbol2 = request.form.get('symbol2')
         
         if symbol1 and symbol2:
-            qoute1 = get_quote(symbol1.upper())
-            qoute2 = get_quote(symbol2.upper())
+            quote1 = get_quote(symbol1.upper())
+            quote2 = get_quote(symbol2.upper())
             
             profile1 = get_profile(symbol1)
             profile2 = get_profile(symbol2)
@@ -129,7 +129,7 @@ def compare():
             earnings1 = get_earnings(symbol1)
             earnings2 = get_earnings(symbol2)
             
-            return render_template('compare.html', symbol1=symbol1, symbol2=symbol2, qoute1=qoute1, qoute2=qoute2,
+            return render_template('compare.html', symbol1=symbol1, symbol2=symbol2, quote1=quote1, quote2=quote2,
                                    profile1=profile1, profile2=profile2, market_cap1=market_cap1, market_cap2=market_cap2,
                                    financials1=financials1, financials2=financials2, earnings1=earnings1, earnings2=earnings2)
         return render_template('compare.html', symbol1=symbol1, symbol2=symbol2)
