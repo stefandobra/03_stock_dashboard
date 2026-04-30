@@ -99,9 +99,6 @@ def add_portfolio_entry():
     symbol = request.form.get('symbol')
     if symbol:
         portfolio = view_portfolio()
-        for row in portfolio:
-            if row['symbol'] == symbol:
-                return {"success": False}
         shares = request.form.get('shares')
         price = request.form.get('price')
         add_to_portfolio(symbol.upper(), shares, price)

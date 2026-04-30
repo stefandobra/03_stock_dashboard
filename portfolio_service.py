@@ -5,6 +5,8 @@ def add_to_portfolio(symbol, shares, price):
     """Connects to portfolio database, parses date to ISO format and inserts data into portfolio table"""
     con, cur = get_connection()
 
+    shares = float(shares)
+    price = float(price)
     date_time = date.today().strftime("%Y-%m-%d")
     
     cur.execute("SELECT symbol, dateadded, sharesowned, avgprice FROM portfolio WHERE symbol=?", (symbol, ))
