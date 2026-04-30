@@ -1,0 +1,174 @@
+<html>
+    <style>
+    table, th, td {
+    border:1px solid black;
+    }
+    </style>
+    <h1>Compare Stocks</h1>
+
+    <nav>
+        <a href="/">Home page</a>
+    </nav>
+    <br>
+
+    <h2>Search Stocks to Compare</h2>
+
+    <form action="/compare" method="post">
+        <label for="symbol1">1st Symbol:</label>
+        <input type="text" id="symbol1" name="symbol1"><br>
+        <label for="symbol2">2nd Symbol:</label>
+        <input type="text" id="symbol2" name="symbol2"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if message %}
+        <h2>{{ message }}</h2>
+
+    {% elif symbol1 and symbol2 %}
+        <table style="width: 100%;">
+            <tr>
+                <th>As of today</th>
+                <th>{{ symbol1 }}</th>
+                <th>{{ symbol2 }}</th>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ profile1.name }}</td>
+                <td>{{ profile2.name }}</td>
+            </tr>
+            <tr>
+                <td>Industry</td>
+                <td>{{ profile1.finnhubIndustry}}</td>
+                <td>{{ profile2.finnhubIndustry}}</td>
+            </tr>
+            <tr>
+                <td>Market Cap</td>
+                <td>{{ market_cap1 }}</td>
+                <td>{{ market_cap2 }}</td>
+            </tr>
+            <tr>
+                <td>Exchange</td>
+                <td>{{ profile1.exchange}}</td>
+                <td>{{ profile2.exchange}}</td>
+            </tr>
+            <tr>
+                <td>Current Price</td>
+                <td>{{ quote1.c }}</td>
+                <td>{{ quote2.c }}</td>
+            </tr>
+            <tr>
+                <td>Change</td>
+                <td>${{ quote1.d }}</td>
+                <td>${{ quote2.d }}</td>
+            </tr>
+            <tr>
+                <td>Percent Change</td>
+                <td>{{ quote1.dp }}%</td>
+                <td>{{ quote2.dp }}%</td>
+            </tr>
+            <tr>
+                <td>Daily High</td>
+                <td>${{ quote1.h}}</td>
+                <td>${{ quote2.h}}</td>
+            </tr>
+            <tr>
+                <td>Daily Low</td>
+                <td>${{ quote1.l}}</td>
+                <td>${{ quote2.l}}</td>
+            </tr>
+            <tr>
+                <td>52 Week High</td>
+                <td>${{ financials1['52WeekHigh'] }}</td>
+                <td>${{ financials2['52WeekHigh'] }}</td>
+            </tr>
+            <tr>
+                <td>52 Week Low</td>
+                <td>${{ financials1['52WeekLow'] }}</td>
+                <td>${{ financials2['52WeekLow'] }}</td>
+            </tr>
+            <tr>
+                <td>52 Week Return %</td>
+                <td>{{ financials1['52WeekPriceReturnDaily'] | round(2) }}%</td>
+                <td>{{ financials2['52WeekPriceReturnDaily'] | round(2) }}%</td>
+            </tr>
+            <tr>
+                <td>10 Day Avg Volume (M)</td>
+                <td>${{ financials1['10DayAverageTradingVolume'] }}</td>
+                <td>${{ financials2['10DayAverageTradingVolume'] }}</td>
+            </tr>
+            <tr>
+                <td>Beta</td>
+                <td>{{ financials1['beta'] }}</td>
+                <td>{{ financials2['beta'] }}</td>
+            </tr>
+            <tr>
+                <td>P/E Ratio (TTM)</td>
+                <td>{{ financials1['peTTM'] }}</td>
+                <td>{{ financials2['peTTM'] }}</td>
+            </tr>
+            <tr>
+                <td>Net Profit Margin %</td>
+                <td>{{ financials1['netProfitMarginTTM'] }}%</td>
+                <td>{{ financials2['netProfitMarginTTM'] }}%</td>
+            </tr>
+            <tr>
+                <td>Revenue Growth YoY %</td>
+                <td>{{ financials1['revenueGrowthTTMYoy'] }}%</td>
+                <td>{{ financials2['revenueGrowthTTMYoy'] }}%</td>
+            </tr>
+            <tr>
+                <td>Gross Margin %</td>
+                <td>{{ financials1['grossMarginTTM'] }}%</td>
+                <td>{{ financials2['grossMarginTTM'] }}%</td>
+            </tr>           
+        </table>
+        
+        <div style="display: flex; gap: 20px; width: 100%;">
+            <div style="flex: 1;">
+                <table style="width: 100%;">
+                    <caption>{{ symbol1 }} - Earnings History</caption>
+                    <tr>
+                        <th>Period</th>
+                        <th>Actual EPS</th>
+                        <th>Estimated EPS</th>
+                        <th>Surprise %</th>
+                    </tr>
+                    {% for earning in earnings1 %}
+                        <tr>
+                            <td>Q{{ earning['quarter'] }} {{ earning['year'] }}</td>
+                            <td>${{ earning['actual']}} per share</td>
+                            <td>${{ earning['estimate']}} per share</td>
+                            <td>{{ earning['surprisePercent']}}%</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div style="flex: 1;">
+                <table style="width: 100%;">
+                    <caption>{{ symbol2 }} - Earnings History</caption>
+                    <tr>
+                        <th>Period</th>
+                        <th>Actual EPS</th>
+                        <th>Estimated EPS</th>
+                        <th>Surprise %</th>
+                    </tr>
+                    {% for earning in earnings2 %}
+                        <tr>
+                            <td>Q{{ earning['quarter'] }} {{ earning['year'] }}</td>
+                            <td>${{ earning['actual']}} per share</td>
+                            <td>${{ earning['estimate']}} per share</td>
+                            <td>{{ earning['surprisePercent']}}%</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+        </div>
+        
+
+
+
+
+    {% endif %}
+
+
+
+</html>

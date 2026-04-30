@@ -37,8 +37,8 @@ def index():
             market_cap = format_market_cap(company_profile['marketCapitalization']) if company_profile else None
             shares = format_shares(company_profile['shareOutstanding']) if company_profile else None
             return render_template('index.html', quote=quote, symbol=symbol, date_time=date_time, 
-                    close_price=close_price, company_profile=company_profile, company_news=company_news,
-                    market_cap=market_cap, shares=shares)
+                                    close_price=close_price, company_profile=company_profile,
+                                    company_news=company_news, market_cap=market_cap, shares=shares)
         return render_template('index.html', quote=quote)
     
 @app.route('/watchlist', methods=['GET', 'POST'])
@@ -116,6 +116,9 @@ def compare():
         if symbol1 and symbol2:
             quote1 = get_quote(symbol1.upper())
             quote2 = get_quote(symbol2.upper())
+            
+            if not quote1 or not quote2:
+                return render_template('compare.html', message='One or both symbols are invalid')
             
             profile1 = get_profile(symbol1)
             profile2 = get_profile(symbol2)
