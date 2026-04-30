@@ -6,6 +6,7 @@ from company_service import get_profile, format_market_cap, format_shares
 from db import create_tables
 from watchlist_service import view_watchlist, add_symbol, remove_symbol
 from portfolio_service import view_portfolio, remove_from_portfolio, add_to_portfolio
+from compare_service import get_earnings, get_financials
 
 app = Flask(__name__)
 create_tables()
@@ -103,6 +104,35 @@ def add_portfolio_entry():
         add_to_portfolio(symbol.upper(), shares, price)
         return {"success": True}
     return {"success": False}
+
+@app.route('/compare', methods=['GET', 'POST'])
+def compare():
+    if request.method == 'GET':
+        return render_template('compare.html')
+    else:
+        symbol1 = request.form.get('symbol1')
+        symbol2 = request.form.get('symbol2')
+        
+        if symbol1 and symbol2:
+            qoute1 = get_quote(symbol1.upper())
+            qoute2 = get_quote(symbol2.upper())
+            
+            profile1 = get_profile(symbol1)
+            profile2 = get_profile(symbol2)
+
+            market_cap1 = format_market_cap(profile1['marketCapitalization']) if profile1 else None
+            market_cap2 = format_market_cap(profile2['marketCapitalization']) if profile2 else None
+            
+            financials1 = get_financials(symbol1)
+            financials2 = get_financials(symbol2)
+
+            earnings1 = get_earnings(symbol1)
+            earnings2 = get_earnings(symbol2)
+            
+            return render_template('compare.html', symbol1=symbol1, symbol2=symbol2, qoute1=qoute1, qoute2=qoute2,
+                                   profile1=profile1, profile2=profile2, market_cap1=market_cap1, market_cap2=market_cap2,
+                                   financials1=financials1, financials2=financials2, earnings1=earnings1, earnings2=earnings2)
+        return render_template('compare.html', symbol1=symbol1, symbol2=symbol2)
 
 
 if __name__ == '__main__':
