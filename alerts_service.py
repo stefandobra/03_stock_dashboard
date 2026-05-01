@@ -37,10 +37,19 @@ def delete_alert(alert_id):
     con.commit()
     
 def trigger_alert(alert_id):
-    """Marks alert as triggered so the scheduler skips it on future checks and it doesn't fire repeatedly."""
-    con, cur =get_connection()
+    """Marks alert as triggered so the scheduler skips it on future checks and it doesn't fire repeatedly"""
+    con, cur = get_connection()
     
     data = (1, alert_id)
     cur.execute("UPDATE alerts SET triggered = (?) WHERE id = (?)", data)
     con.commit()
     
+def get_untriggered_alerts():
+    """Returns only untriggered alerts so the scheduler avoids wasting API calls on alerts that have already fired"""
+    con, cur = get_connection()
+    
+    data = (0, )
+    cur.execute("SELECT * FROM alerts WHERE triggered = (?)", data)
+    untriggered = cur.fetchall()
+    
+    return untriggered
