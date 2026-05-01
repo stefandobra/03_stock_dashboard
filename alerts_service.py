@@ -29,7 +29,7 @@ def get_alerts():
     return alerts
 
 def delete_alert(alert_id):
-    """Deletes alert based in unique id to handle multiple alerts for same stock"""
+    """Deletes alert based in unique id to handle multiple alerts for same stock."""
     con, cur = get_connection()
     
     data = (alert_id, )
@@ -37,7 +37,7 @@ def delete_alert(alert_id):
     con.commit()
     
 def trigger_alert(alert_id):
-    """Marks alert as triggered so the scheduler skips it on future checks and it doesn't fire repeatedly"""
+    """Marks alert as triggered so the scheduler skips it on future checks and it doesn't fire repeatedly."""
     con, cur = get_connection()
     
     data = (1, alert_id)
@@ -45,7 +45,7 @@ def trigger_alert(alert_id):
     con.commit()
     
 def get_untriggered_alerts():
-    """Returns only untriggered alerts so the scheduler avoids wasting API calls on alerts that have already fired"""
+    """Returns only untriggered alerts so the scheduler avoids wasting API calls on alerts that have already fired."""
     con, cur = get_connection()
     
     data = (0, )
@@ -53,3 +53,13 @@ def get_untriggered_alerts():
     untriggered = cur.fetchall()
     
     return untriggered
+
+def get_triggered_alerts():
+    """Returns only triggered alerts so the JS polling endpoint knows to send notifications."""
+    con, cur = get_connection()
+    
+    data = (1, )
+    cur.execute("SELECT * FROM alerts WHERE triggered = (?)", data)
+    triggered = cur.fetchall() 
+    
+    return triggered
