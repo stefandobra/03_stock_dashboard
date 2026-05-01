@@ -27,3 +27,11 @@ def get_alerts():
     alerts = cur.fetchall()
     
     return alerts
+
+def delete_alert(alert_id):
+    """Deletes alert based in unique id to handle multiple alerts for same stock"""
+    con, cur = get_connection()
+    
+    data = (alert_id, )
+    cur.execute("DELETE FROM alerts WHERE id = (?)", data)
+    con.commit()
