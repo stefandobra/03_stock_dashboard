@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from stock_service import get_quote
 from history_service import get_price_history
 from news_service import get_news
@@ -7,7 +7,7 @@ from db import create_tables
 from watchlist_service import view_watchlist, add_symbol, remove_symbol
 from portfolio_service import view_portfolio, remove_from_portfolio, add_to_portfolio
 from compare_service import get_earnings, get_financials
-from alerts_service import get_alerts, create_alert, delete_alert
+from alerts_service import get_alerts, create_alert, delete_alert, get_triggered_alerts
 
 app = Flask(__name__)
 create_tables()
@@ -175,7 +175,11 @@ def alerts():
             delete_alert(alert_id)
             return redirect('/alerts')
 
-
+@app.route('/alerts/pending', methods=['GET'])
+def alerts_pending():
+    triggered_alerts = get_triggered_alerts()
+    return jsonify(triggered_alerts)
+    
 if __name__ == '__main__':
     app.run(debug=True)
     
