@@ -10,7 +10,7 @@ window.onload = function() {
             for (const alert of alerts) {
                 if (!notifiedIds.has(alert.id)) {
                     notifiedIds.add(alert.id)
-                    const notification = new Notification("Price Alert", { body: alert.symbol + " hit " + alert.target_price })
+                    const notification = new Notification("Price Alert", { body: alert.symbol + " went " + alert.direction + " $" + alert.target_price })
                     window.location.reload()
                 }
             }
