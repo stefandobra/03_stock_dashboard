@@ -1,0 +1,71 @@
+<html>
+    <style>
+    table, th, td {
+    border:1px solid black;
+    }
+    </style>
+    <h1>Alerts</h1>
+
+    <nav>
+        <a href="/">Home page</a>
+        <a href="/watchlist">View Watchlist</a>
+        <a href="/portfolio">View Portfolio</a>
+        <a href="/compare">Compare Stocks</a>
+    </nav>
+    <br>
+
+    <h2>Set Alert</h2>
+
+    <form action="/alerts" method="post">
+        <input type="hidden" name="action" value="create">
+        <label for="symbol">Symbol:</label>
+        <input type="text" id="symbol" name="symbol" required><br>
+        <label for="target_price">Target price:</label>
+        <input type="text" name="target_price" id="target_price" required><br>
+        <label for="direction">Choose direction</label>
+        <select name="direction" id="direction">
+            <option value="above">Above</option>
+            <option value="below">Below</option>
+        </select>
+        <br>
+        <input type="submit" value="Add alert">
+    </form>
+
+    {% if alerts_data %}
+        <table style="width: 100%;">
+            <tr>
+                <th>Symbol</th>
+                <th>Current Price</th>
+                <th>Target Price</th>
+                <th>Direction</th>
+                <th>Status</th>
+                <th>Date added</th>
+                <th>Delete alert</th>
+            </tr>
+            {% for id, data in alerts_data.items() %}
+                <tr>
+                    <td>{{ data.symbol }}</td>
+                    <td>{{ data.current_price }}</td>
+                    <td>{{ data.target_price }}</td>
+                    <td>{{ data.direction }}</td>
+                    {% if data.triggered == 1 %}
+                        <td>Triggered</td>
+                    {% else %}
+                        <td>Active</td>
+                    {% endif %}
+                    <td>{{ data.date_added }}</td>
+                    <td>
+                        <form action="/alerts" method="post">
+                            <input type="hidden" name="alert_id" value="{{ id }}">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="submit" value="Delete alert">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h2>No alerts added</h2>
+    {% endif %}
+
+</html>
