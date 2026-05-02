@@ -24,12 +24,15 @@
         <input type="text" name="target_price" id="target_price" required><br>
         <label for="direction">Choose direction</label>
         <select name="direction" id="direction">
-            <option value="above">Above</option>
-            <option value="below">Below</option>
+            <option value="Above">Above</option>
+            <option value="Below">Below</option>
         </select>
         <br>
         <input type="submit" value="Add alert">
     </form>
+    {% if message %}
+        <i>{{ message }}</i>
+    {% endif %}
 
     {% if alerts_data %}
         <table style="width: 100%;">

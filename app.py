@@ -8,6 +8,7 @@ from watchlist_service import view_watchlist, add_symbol, remove_symbol
 from portfolio_service import view_portfolio, remove_from_portfolio, add_to_portfolio
 from compare_service import get_earnings, get_financials
 from alerts_service import get_alerts, create_alert, delete_alert, get_triggered_alerts
+import datetime
 
 app = Flask(__name__)
 create_tables()
@@ -137,38 +138,54 @@ def compare():
                                    profile1=profile1, profile2=profile2, market_cap1=market_cap1, market_cap2=market_cap2,
                                    financials1=financials1, financials2=financials2, earnings1=earnings1, earnings2=earnings2)
         return render_template('compare.html', symbol1=symbol1, symbol2=symbol2)
+
+def build_alerts_data():
+    alerts = get_alerts()
+    alerts_data = {}
+    for alert in alerts:
+        alert_id = alert['id']
+        symbol = alert['symbol']
+        target_price = alert['target_price']
+        direction = alert['direction']
+        triggered = alert['triggered']
+        date_time = alert['dateadded']
+        date_time = datetime.datetime.strptime(date_time, "%Y-%m-%dT%H:%M:%S.%f").strftime("%d %B %Y %H:%M")
+        quote = get_quote(symbol.upper())
+        if quote:
+            current_price = quote['c']
+            alerts_data[alert_id] = {
+                'symbol': symbol,
+                'target_price': target_price,
+                'current_price': current_price,
+                'direction': direction,
+                'triggered': triggered,
+                'date_added': date_time
+            }
+    return alerts_data      
     
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
     if request.method == 'GET':
-        alerts = get_alerts()
-        alerts_data = {}
-        for alert in alerts:
-            alert_id = alert['id']
-            symbol = alert['symbol']
-            target_price = alert['target_price']
-            direction = alert['direction']
-            triggered = alert['triggered']
-            date_time = alert['dateadded']
-            quote = get_quote(symbol.upper())
-            if quote:
-                current_price = quote['c']
-                alerts_data[alert_id] = {
-                    'symbol': symbol,
-                    'target_price': target_price,
-                    'current_price': current_price,
-                    'direction': direction,
-                    'triggered': triggered,
-                    'date_added': date_time
-                }      
-        return render_template('alerts.html', alerts_data=alerts_data)
+        alerts_data = build_alerts_data()      
+        return render_template('alerts.html', alerts_data=alerts_data, message=None)
     else:
         action = request.form.get('action')
         if action == 'create':
+            alerts_data = build_alerts_data()
             symbol = request.form.get('symbol')
             target_price = request.form.get('target_price')
+            if not symbol or not target_price:
+                return render_template('alerts.html', alerts_data=alerts_data, message="Please enter a symbol and target price.")
+            if not get_quote(symbol.upper()):
+                return render_template('alerts.html', alerts_data=alerts_data, message="Please enter a valid symbol.")   
+            try:
+                target_price = float(target_price)
+            except ValueError:
+                return render_template('alerts.html', alerts_data=alerts_data, message="Please enter a valid price target.")
+            if target_price <= 0:
+                return render_template('alerts.html', alerts_data=alerts_data, message="Please enter a positive price target.")
             direction = request.form.get('direction')
-            create_alert(symbol, target_price, direction)
+            create_alert(symbol.upper(), target_price, direction)
             return redirect('/alerts')
         elif action == 'delete':
             alert_id = request.form.get('alert_id')
@@ -178,8 +195,6 @@ def alerts():
 @app.route('/alerts/pending', methods=['GET'])
 def alerts_pending():
     triggered_alerts = get_triggered_alerts()
-    dict_triggered_alerts = []
-    
     dict_triggered_alerts = [dict(alert) for alert in triggered_alerts]
     return jsonify(dict_triggered_alerts)
     
