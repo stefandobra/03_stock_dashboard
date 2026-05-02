@@ -178,7 +178,10 @@ def alerts():
 @app.route('/alerts/pending', methods=['GET'])
 def alerts_pending():
     triggered_alerts = get_triggered_alerts()
-    return jsonify(triggered_alerts)
+    dict_triggered_alerts = []
+    
+    dict_triggered_alerts = [dict(alert) for alert in triggered_alerts]
+    return jsonify(dict_triggered_alerts)
     
 if __name__ == '__main__':
     app.run(debug=True)
