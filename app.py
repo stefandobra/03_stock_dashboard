@@ -9,9 +9,19 @@ from portfolio_service import view_portfolio, remove_from_portfolio, add_to_port
 from compare_service import get_earnings, get_financials
 from alerts_service import get_alerts, create_alert, delete_alert, get_triggered_alerts
 import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
+from scheduler_service import check_alerts
+import os
 
 app = Flask(__name__)
 create_tables()
+
+print(os.environ.get('WERKZEUG_RUN_MAIN'))
+if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(check_alerts, 'interval', seconds=60)
+    scheduler.start()
+    check_alerts()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

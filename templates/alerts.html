@@ -24,8 +24,8 @@
         <input type="text" name="target_price" id="target_price" required><br>
         <label for="direction">Choose direction</label>
         <select name="direction" id="direction">
-            <option value="Above">Above</option>
-            <option value="Below">Below</option>
+            <option value="above">Above</option>
+            <option value="below">Below</option>
         </select>
         <br>
         <input type="submit" value="Add alert">
@@ -50,7 +50,7 @@
                     <td>{{ data.symbol }}</td>
                     <td>{{ data.current_price }}</td>
                     <td>{{ data.target_price }}</td>
-                    <td>{{ data.direction }}</td>
+                    <td>{{ data.direction | capitalize }}</td>
                     {% if data.triggered == 1 %}
                         <td>Triggered</td>
                     {% else %}
