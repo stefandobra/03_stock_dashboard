@@ -16,12 +16,10 @@ import os
 app = Flask(__name__)
 create_tables()
 
-print(os.environ.get('WERKZEUG_RUN_MAIN'))
 if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
     scheduler = BackgroundScheduler()
     scheduler.add_job(check_alerts, 'interval', seconds=60)
     scheduler.start()
-    check_alerts()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
