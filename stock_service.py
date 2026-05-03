@@ -7,6 +7,7 @@ FINNHUB_APIKEY = os.getenv('STOCK_DASHBOARD_FINNHUB_APIKEY')
 
 finnhub_client = finnhub.Client(api_key=FINNHUB_APIKEY)
 
+# Finnhub returns c=0 for invalid symbols instead of an error — treat it as not found
 def get_quote(symbol: str):
     quote = finnhub_client.quote(symbol)
     if quote['c'] == 0:

@@ -7,6 +7,7 @@ TWELVEDATA_APIKEY = os.getenv('STOCK_DASHBOARD_TWELVEDATA_APIKEY')
 
 td = TDClient(apikey=TWELVEDATA_APIKEY)
 
+# outputsize is calibrated per interval — fetching 390 one-minute points for a 1-day view makes sense, but the same count at weekly interval would span years
 def get_price_history(symbol, timeframe):
     interval = {
         '1D': '1min',

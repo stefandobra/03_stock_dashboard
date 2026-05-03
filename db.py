@@ -8,7 +8,8 @@ def create_tables():
     cur.execute("CREATE TABLE IF NOT EXISTS watchlist(symbol TEXT, dateadded TEXT)")
     cur.execute("CREATE TABLE IF NOT EXISTS portfolio(symbol TEXT, dateadded TEXT, sharesowned REAL, avgprice REAL)")
     cur.execute("CREATE TABLE IF NOT EXISTS alerts(id TEXT PRIMARY KEY, symbol TEXT, target_price REAL, direction TEXT, triggered INTEGER, notified INTEGER, dateadded TEXT)")
-    
+
+# row_factory allows columns to be accessed by name instead of index — makes code readable and less fragile   
 def get_connection():
     """Returns connection and cursor for the database"""
     con = sqlite3.connect("stock_dashboard.db")

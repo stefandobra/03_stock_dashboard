@@ -16,6 +16,7 @@ def add_to_portfolio(symbol, shares, price):
         existing_shares = stock['sharesowned']
         average_price = stock['avgprice']
 
+        # Weighted average — accounts for different quantities bought at different prices, not just a simple average
         total_shares = existing_shares + shares
         new_avg = (existing_shares * average_price + shares * price) / (total_shares)
 

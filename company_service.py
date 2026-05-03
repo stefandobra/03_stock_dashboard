@@ -12,7 +12,8 @@ def get_profile(symbol):
         return company_profile
     else:
         return None
-    
+
+# Finnhub returns market cap in millions and shares in millions — format to readable B/T/M notation for display
 def format_market_cap(market_cap):
     if market_cap >= 1_000_000:
         return f'${market_cap/1_000_000:,.2f}T'

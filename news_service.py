@@ -7,6 +7,7 @@ load_dotenv()
 FINNHUB_APIKEY = os.getenv('STOCK_DASHBOARD_FINNHUB_APIKEY')
 finnhub_client = finnhub.Client(api_key=FINNHUB_APIKEY)
 
+# Defaults to last 7 days of news — None parameters allow custom date ranges if needed elsewhere
 def get_news(symbol, from_date=None, to_date=None):
     
     from_date = datetime.date.today() - datetime.timedelta(days=7) if from_date is None else from_date

@@ -7,6 +7,7 @@ from alerts_service import get_alerts
 
 load_dotenv()
 
+# Defined at module level so the prompt is stable across calls — Anthropic caches it server-side to avoid reprocessing the same instructions on every request
 SYSTEM_PROMPT = """You are a financial portfolio assistant for a stock dashboard application.
 You will be given a user's portfolio holdings and price alerts as JSON data.
 Return your response as a JSON object with exactly two keys:
@@ -48,6 +49,7 @@ def get_ai_summary():
         for block in response.content:
             if block.type == "text":
                 text = block.text.strip()
+                # Strip markdown code fences — the model sometimes wraps JSON in ```json blocks despite being instructed not to
                 if text.startswith("```"):
                     text = text.split("```")[1]
                     if text.startswith("json"):

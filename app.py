@@ -17,6 +17,7 @@ import os
 app = Flask(__name__)
 create_tables()
 
+# Werkzeug runs the app twice in debug mode — this guard ensures the scheduler only starts in the reloader child process, not the parent
 if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
     scheduler = BackgroundScheduler()
     scheduler.add_job(check_alerts, 'interval', seconds=60)
@@ -148,6 +149,7 @@ def compare():
                                    financials1=financials1, financials2=financials2, earnings1=earnings1, earnings2=earnings2)
         return render_template('compare.html', symbol1=symbol1, symbol2=symbol2)
 
+# Helper to avoid duplicating alert-building logic across GET and POST — both routes need the same data structure
 def build_alerts_data():
     alerts = get_alerts()
     alerts_data = {}
@@ -201,6 +203,7 @@ def alerts():
             delete_alert(alert_id)
             return redirect('/alerts')
 
+# Returns JSON instead of HTML — this is an API endpoint called by JS polling, not a page route
 @app.route('/alerts/pending', methods=['GET'])
 def alerts_pending():
     triggered_alerts = get_triggered_alerts()
