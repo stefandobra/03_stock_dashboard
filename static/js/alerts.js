@@ -1,5 +1,27 @@
+function showBanner(alertData) {
+    const banner = document.createElement('div')
+    banner.style.position = 'fixed'
+    banner.style.top = '20px'
+    banner.style.left = '50%'
+    banner.style.transform = 'translateX(-50%)'
+    banner.style.backgroundColor = 'green'
+    banner.style.padding = '15px'
+    banner.style.zIndex = '10'
+    banner.innerHTML = alertData.symbol + " went " + alertData.direction + " $" + alertData.target_price
+    const button = document.createElement('button')
+    button.style.display = 'block'                                                          
+    button.style.marginTop = '8px'
+    button.innerHTML = "Dismiss"
+    button.onclick = function() {
+        location.reload()
+    }
+    banner.appendChild(button)
+    document.body.appendChild(banner)
+}
+
+
+
 window.onload = function() {
-    Notification.requestPermission();
 
     const notifiedIds = new Set()
 
@@ -10,7 +32,7 @@ window.onload = function() {
             for (const alert of alerts) {
                 if (!notifiedIds.has(alert.id)) {
                     notifiedIds.add(alert.id)
-                    const notification = new Notification("Price Alert", { body: alert.symbol + " went " + alert.direction + " $" + alert.target_price })
+                    showBanner(alert)
                 }
             }
         });
