@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+    <h1>AI Summary of Portfolio and Alerts</h1>
+
+    <nav>
+        <a href="/">Home page</a>
+        <a href="/watchlist">View Watchlist</a>
+        <a href="/portfolio">View Portfolio</a>
+        <a href="/compare">Compare Stocks</a>
+        <a href="/alerts">Alerts</a>
+        <a href="/ai_summary">AI Summary</a>
+    </nav>
+    <br>
+
+    {% if summary.error %}
+        <p><i>{{ summary.error }}</i></p>
+    {% else %}
+        <h2>Portfolio</h2>
+        <p>{{ summary.portfolio }}</p>
+
+        <h2>Alerts</h2>
+        <p>{{ summary.alerts }}</p>
+    {% endif %}
+
+    <script src="/static/js/alerts.js"></script>
+</html>

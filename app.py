@@ -8,6 +8,7 @@ from watchlist_service import view_watchlist, add_symbol, remove_symbol
 from portfolio_service import view_portfolio, remove_from_portfolio, add_to_portfolio
 from compare_service import get_earnings, get_financials
 from alerts_service import get_alerts, create_alert, delete_alert, get_triggered_alerts, mark_notified
+from ai_service import get_ai_summary
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from scheduler_service import check_alerts
@@ -212,6 +213,11 @@ def notified_alert():
     mark_notified(alert_id)
     return {"success": True}
     
+
+@app.route('/ai_summary', methods=['GET'])
+def ai_summary():
+    summary = get_ai_summary()
+    return render_template('ai_summary.html', summary=summary)
 
 if __name__ == '__main__':
     app.run(debug=True)
