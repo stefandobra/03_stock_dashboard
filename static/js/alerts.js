@@ -1,7 +1,8 @@
 function showBanner(alertData) {
     const banner = document.createElement('div')
+    banner.className = 'alert-banner'
     banner.style.position = 'fixed'
-    banner.style.top = '20px'
+    banner.style.top = (20 + document.querySelectorAll('.alert-banner').length * 80) + 'px'
     banner.style.left = '50%'
     banner.style.transform = 'translateX(-50%)'
     banner.style.backgroundColor = 'green'
@@ -13,7 +14,7 @@ function showBanner(alertData) {
     button.style.marginTop = '8px'
     button.innerHTML = "Dismiss"
     button.onclick = function() {
-        location.reload()
+        banner.remove()
     }
     banner.appendChild(button)
     document.body.appendChild(banner)
