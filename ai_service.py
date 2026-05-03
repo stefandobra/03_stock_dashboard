@@ -24,7 +24,7 @@ def get_ai_summary():
         "alerts": alerts
     }
 
-    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+    client = anthropic.Anthropic()
 
     try:
         response = client.messages.create(
@@ -47,7 +47,13 @@ def get_ai_summary():
 
         for block in response.content:
             if block.type == "text":
-                return json.loads(block.text)
+                text = block.text.strip()
+                if text.startswith("```"):
+                    text = text.split("```")[1]
+                    if text.startswith("json"):
+                        text = text[4:]
+                    text = text.strip()
+                return json.loads(text)
 
         return {"error": "No response received from the API."}
 
