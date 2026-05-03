@@ -7,7 +7,7 @@ from db import create_tables
 from watchlist_service import view_watchlist, add_symbol, remove_symbol
 from portfolio_service import view_portfolio, remove_from_portfolio, add_to_portfolio
 from compare_service import get_earnings, get_financials
-from alerts_service import get_alerts, create_alert, delete_alert, get_triggered_alerts
+from alerts_service import get_alerts, create_alert, delete_alert, get_triggered_alerts, mark_notified
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from scheduler_service import check_alerts
@@ -205,7 +205,14 @@ def alerts_pending():
     triggered_alerts = get_triggered_alerts()
     dict_triggered_alerts = [dict(alert) for alert in triggered_alerts]
     return jsonify(dict_triggered_alerts)
+
+@app.route('/alerts/triggered', methods=['POST'])
+def notified_alert():
+    alert_id = request.json.get('alert_id')
+    mark_notified(alert_id)
+    return {"success": True}
     
+
 if __name__ == '__main__':
     app.run(debug=True)
     

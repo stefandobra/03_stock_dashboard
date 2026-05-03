@@ -12,10 +12,11 @@ def create_alert(symbol, target_price, direction):
     alert_id = uuid.uuid4().hex
     target_price = float(target_price)
     triggered = 0
+    notified = 0
     
-    data = (alert_id, symbol, target_price, direction, triggered, date_time)
+    data = (alert_id, symbol, target_price, direction, triggered, notified, date_time)
     
-    cur.execute("INSERT INTO alerts VALUES (?, ?, ?, ?, ?, ?)", data)
+    cur.execute("INSERT INTO alerts VALUES (?, ?, ?, ?, ?, ?, ?)", data)
     con.commit()
     
 def get_alerts():
@@ -58,8 +59,16 @@ def get_triggered_alerts():
     """Returns only triggered alerts so the JS polling endpoint knows to send notifications."""
     con, cur = get_connection()
     
-    data = (1, )
-    cur.execute("SELECT * FROM alerts WHERE triggered = (?)", data)
+    data = (1, 0)
+    cur.execute("SELECT * FROM alerts WHERE triggered = (?) AND notified = (?)", data)
     triggered = cur.fetchall() 
     
     return triggered
+
+def mark_notified(alert_id):
+    """Set notified to 1 so the banner does not reappear after page reload."""
+    con, cur = get_connection()
+    
+    data = (1, alert_id)
+    cur.execute("UPDATE alerts SET notified = (?) WHERE id = (?)", data)
+    con.commit()

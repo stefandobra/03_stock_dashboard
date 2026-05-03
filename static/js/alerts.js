@@ -17,6 +17,14 @@ function showBanner(alertData) {
     }
     banner.appendChild(button)
     document.body.appendChild(banner)
+    
+    fetch('/alerts/triggered', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ alert_id: alertData.id })
+    })
 }
 
 
