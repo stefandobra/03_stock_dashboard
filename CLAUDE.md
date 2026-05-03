@@ -38,6 +38,9 @@ Flask app with a thin route layer (`app.py`) delegating to single-responsibility
 | `compare_service.py` | Financial metrics and earnings for side-by-side comparison |
 | `watchlist_service.py` | SQLite CRUD for the watchlist |
 | `portfolio_service.py` | Portfolio holdings with average price and P&L calculations |
+| `alerts_service.py` | SQLite CRUD for price alerts + trigger/notify state management |
+| `scheduler_service.py` | APScheduler background job checking alert conditions every 60s via Finnhub |
+| `ai_service.py` | Calls Anthropic API with portfolio and alerts data, returns two-section JSON summary |
 | `db.py` | SQLite connection management and schema creation |
 
 ### Routes (`app.py`)
@@ -50,12 +53,17 @@ Flask app with a thin route layer (`app.py`) delegating to single-responsibility
 | `/portfolio` | GET, POST | Holdings with P&L |
 | `/add_to_portfolio` | POST | Add shares with average price |
 | `/compare` | GET, POST | Side-by-side stock comparison |
+| `/alerts` | GET, POST | View/create/delete price alerts |
+| `/alerts/pending` | GET | JSON: triggered+unnotified alerts (polled by alerts.js every 30s) |
+| `/alerts/triggered` | POST | Marks an alert as notified so the banner doesn't reappear |
+| `/ai_summary` | GET | AI-generated portfolio and alerts summary via Anthropic |
 
 ### Database Schema (SQLite)
 
 ```sql
 watchlist(symbol TEXT, dateadded TEXT)
 portfolio(symbol TEXT, dateadded TEXT, sharesowned REAL, avgprice REAL)
+alerts(id TEXT PRIMARY KEY, symbol TEXT, target_price REAL, direction TEXT, triggered INTEGER, notified INTEGER, dateadded TEXT)
 ```
 
 ### Frontend
@@ -66,4 +74,4 @@ Templates live in `templates/` (Jinja2). Static assets (CSS, JS) in `static/`.
 
 - **Finnhub** (`finnhub-python`) — quotes, news, company profiles
 - **Twelve Data** (`twelvedata`) — price history with OHLCV data
-- **Anthropic** (`anthropic`) — in `requirements.txt` but not yet integrated into any route
+- **Anthropic** (`anthropic`) — called from `ai_service.py`; model `claude-sonnet-4-5` with prompt caching on the system prompt
